@@ -23,8 +23,9 @@ module "vnet" {
 module "linuxservers" {
   source              = "../../"
   resource_group_name = azurerm_resource_group.rg-vm-test-basic.name
-  vm_size             = "Standard_B1ls2"
+  vm_size             = "Standard_B1ls"
   vm_hostname         = "linux-test-vm"
+  admin_password      = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
   vm_os_simple        = "UbuntuServer"
   public_ip_dns       = ["linuxtestvmips"] // change to a unique name per datacenter region
   vnet_subnet_id      = module.vnet.vnet_subnets[0]
@@ -36,7 +37,7 @@ module "linuxservers" {
 module "windowsservers" {
   source              = "../../"
   resource_group_name = azurerm_resource_group.rg-vm-test-basic.name
-  vm_size             = "Standard_B1ms"
+  vm_size             = "Standard_B1ls"
   vm_hostname         = "win-test-vm"
   is_windows_image    = true
   admin_password      = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
