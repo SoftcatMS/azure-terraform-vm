@@ -1,5 +1,5 @@
-# Replace below with module specific code
-
-#variable "instance_name" {
-#  description = "The name of the instance to be deployed"
-#}
+variable "vnet_name" {
+  description = "Name of the vnet to create"
+  type        = string
+  default     = "acctvnet"
+}
