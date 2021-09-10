@@ -27,7 +27,7 @@ module "linuxservers" {
   vm_hostname         = "linux-test-vm"
   admin_password      = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
   vm_os_simple        = "UbuntuServer"
-  public_ip_dns       = ["linuxtestvmips"] // change to a unique name per datacenter region
+  public_ip_dns       = ["linuxtestbasicvmips"] // change to a unique name per datacenter region
   vnet_subnet_id      = module.vnet.vnet_subnets[0]
   enable_ssh_key      = false
 
@@ -42,7 +42,7 @@ module "windowsservers" {
   is_windows_image    = true
   admin_password      = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
   vm_os_simple        = "WindowsServer"
-  public_ip_dns       = ["wintestvmips"] // change to a unique name per datacenter region
+  public_ip_dns       = ["wintestbasicvmips"] // change to a unique name per datacenter region
   vnet_subnet_id      = module.vnet.vnet_subnets[0]
 
   depends_on = [azurerm_resource_group.rg-vm-test-basic]
