@@ -2,28 +2,17 @@
 
 # Test values
 
-resource_group1 = 'rg-test-advanced-resources'
-vnet1 = "vnet-test-advanced"
+resource_group1 = 'rg-test-vm-advanced-resources'
 
 
-describe azure_virtual_network(resource_group: resource_group1, name: vnet1) do
+describe azure_virtual_machine(resource_group: resource_group1, name: 'linux-test-vm-vmLinux-0') do
   it { should exist }
-  its('location')  { should eq 'uksouth' }
-  its('address_space') { should eq ["10.2.0.0/16"] }
+  its('os_disk_name') { should match 'linux-test-vm-osdisk-0' }
 end
 
-describe azure_subnet(resource_group: resource_group1, vnet: vnet1, name: 'subnet1') do
-  it { should exist }
-  its('address_prefix') { should eq "10.2.1.0/24" }
-end
 
-describe azure_subnet(resource_group: resource_group1, vnet: vnet1, name: 'subnet2') do
+describe azure_virtual_machine(resource_group: resource_group1, name: 'win-test-vm-vmWindows-0') do
   it { should exist }
-  its('address_prefix') { should eq "10.2.2.0/24" }
-end
+  its('os_disk_name') { should match 'win-test-vm-osdisk-0' }
 
-describe azure_subnet(resource_group: resource_group1, vnet: vnet1, name: 'subnet3') do
-  it { should exist }
-  its('address_prefix') { should eq "10.2.3.0/24" }
 end
-
