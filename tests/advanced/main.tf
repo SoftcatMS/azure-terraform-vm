@@ -30,29 +30,51 @@ module "vnet" {
 }
 
 module "linuxservers" {
-  source              = "../../"
-  resource_group_name = azurerm_resource_group.rg-vm-test-advanced.name
-  vm_size             = "Standard_B1ls"
-  vm_hostname         = "linux-test-vm"
-  vm_os_simple        = "UbuntuServer"
-  public_ip_dns       = ["linuxtestadvvmips"] // change to a unique name per datacenter region
-  vnet_subnet_id      = module.vnet.vnet_subnets[0]
-  enable_ssh_key      = true
-  ssh_key             = "dummy_rsa.pub"
+  source                           = "../../"
+  resource_group_name              = azurerm_resource_group.rg-vm-test-advanced.name
+  vm_hostname                      = "linux-test-vm"
+  vm_size                          = "Standard_B1ls"
+  nb_public_ip                     = 0
+  remote_port                      = "22"
+  nb_instances                     = 2
+  vm_os_publisher                  = "Canonical"
+  vm_os_offer                      = "UbuntuServer"
+  vm_os_sku                        = "18.04-LTS"
+  vnet_subnet_id                   = module.vnet.vnet_subnets[0]
+  boot_diagnostics                 = true
+  delete_os_disk_on_termination    = true
+  nb_data_disk                     = 2
+  data_disk_size_gb                = 64
+  data_sa_type                     = "Standard_LRS"
+  enable_ssh_key                   = true
+  ssh_key                          = "dummy_rsa.pub"
+  delete_data_disks_on_termination = true
 
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
 }
 
 module "windowsservers" {
-  source              = "../../"
-  resource_group_name = azurerm_resource_group.rg-vm-test-advanced.name
-  vm_size             = "Standard_B1ls"
-  vm_hostname         = "win-test-vm"
-  is_windows_image    = true
-  admin_password      = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
-  vm_os_simple        = "WindowsServer"
-  public_ip_dns       = ["wintestadvvmips"] // change to a unique name per datacenter region
-  vnet_subnet_id      = module.vnet.vnet_subnets[0]
+  source                        = "../../"
+  resource_group_name           = azurerm_resource_group.rg-vm-test-advanced.name
+  vm_hostname                   = "win-test-vm"
+  vm_size                       = "Standard_D2_v4"
+  is_windows_image              = true
+  admin_password                = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
+  allocation_method             = "Static"
+  public_ip_sku                 = "Standard"
+  public_ip_dns                 = ["linuxtestbasicvmip1", "linuxtestbasicvmip2"]
+  nb_public_ip                  = 2
+  remote_port                   = "3389"
+  nb_instances                  = 2
+  vm_os_publisher               = "MicrosoftWindowsServer"
+  vm_os_offer                   = "WindowsServer"
+  vm_os_sku                     = "2012-R2-Datacenter"
+  vnet_subnet_id                = module.vnet.vnet_subnets[0]
+  enable_accelerated_networking = true
+  data_sa_type                  = "Standard_LRS"
+  storage_account_type          = "Standard_LRS"
+  license_type                  = "Windows_Client"
+  identity_type                 = "SystemAssigned" // can be empty, SystemAssigned or UserAssigned
 
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
 }
