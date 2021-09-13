@@ -1,11 +1,17 @@
 # azure-terraform-vm
 
-Deploys a Virtual Network in Azure with a subnet or a set of subnets passed in as input parameters
+Deploys a Virtual Machine in Azure
 
 Based of original module: https://github.com/Azure/terraform-azurerm-compute
 
 It supports creating:
 
+- Virtual Machine  
+- Availability Set
+- Public IP
+- Network Security Group
+- Network Security Rule
+- Network Interface
 
 
 
