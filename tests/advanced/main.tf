@@ -63,9 +63,9 @@ module "windowsservers" {
   allocation_method             = "Static"
   public_ip_sku                 = "Standard"
   public_ip_dns                 = ["linuxtestbasicvmip1", "linuxtestbasicvmip2"]
-  nb_public_ip                  = 2
+  nb_public_ip                  = 1
   remote_port                   = "3389"
-  nb_instances                  = 2
+  nb_instances                  = 1
   vm_os_publisher               = "MicrosoftWindowsServer"
   vm_os_offer                   = "WindowsServer"
   vm_os_sku                     = "2012-R2-Datacenter"
