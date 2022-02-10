@@ -14,7 +14,7 @@ data "azurerm_key_vault_certificate" "example" {
 }
 
 module "linuxservers" {
-  source                           = "github.com/SoftcatMS/azure-terraform-vm/"
+  source                           = "git@github.com:SoftcatMS/azure-terraform-vm"
   resource_group_name              = azurerm_resource_group.example.name
   vm_hostname                      = "mylinuxvm"
   nb_public_ip                     = 0
@@ -43,7 +43,7 @@ module "linuxservers" {
 }
 
 module "windowsservers" {
-  source                        = "github.com/SoftcatMS/azure-terraform-vm/"
+  source                        = "git@github.com:SoftcatMS/azure-terraform-vm"
   resource_group_name           = azurerm_resource_group.example.name
   vm_hostname                   = "mywinvm"
   is_windows_image              = true
