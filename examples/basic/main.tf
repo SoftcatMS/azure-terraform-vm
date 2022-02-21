@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "example" {
 }
 
 module "linuxservers" {
-  source              = "git@github.com:SoftcatMS/azure-terraform-vm"
+  source              = "git@github.com:SoftcatMS/terraform-azure-vm"
   resource_group_name = azurerm_resource_group.example.name
   vm_os_simple        = "UbuntuServer"
   public_ip_dns       = ["linsimplevmips"] // change to a unique name per datacenter region
@@ -14,7 +14,7 @@ module "linuxservers" {
 }
 
 module "windowsservers" {
-  source              = "git@github.com:SoftcatMS/azure-terraform-vm"
+  source              = "git@github.com:SoftcatMS/terraform-azure-vm"
   resource_group_name = azurerm_resource_group.example.name
   is_windows_image    = true
   vm_hostname         = "mywinvm"         // line can be removed if only one VM module per resource group
