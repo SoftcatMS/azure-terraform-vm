@@ -1,4 +1,4 @@
-# azure-terraform-vm
+# terraform-azure-vm
 
 Deploys a Virtual Machine in Azure
 
