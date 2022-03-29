@@ -20,13 +20,43 @@ resource "random_id" "vm-sa" {
 }
 
 resource "azurerm_storage_account" "vm-sa" {
-  count                    = var.boot_diagnostics ? 1 : 0
-  name                     = "bootdiag${lower(random_id.vm-sa.hex)}"
-  resource_group_name      = data.azurerm_resource_group.vm.name
-  location                 = coalesce(var.location, data.azurerm_resource_group.vm.location)
-  account_tier             = element(split("_", var.boot_diagnostics_sa_type), 0)
-  account_replication_type = element(split("_", var.boot_diagnostics_sa_type), 1)
-  tags                     = var.tags
+  count                     = var.boot_diagnostics ? 1 : 0
+  name                      = "bootdiag${lower(random_id.vm-sa.hex)}"
+  resource_group_name       = data.azurerm_resource_group.vm.name
+  location                  = coalesce(var.location, data.azurerm_resource_group.vm.location)
+  account_tier              = element(split("_", var.boot_diagnostics_sa_type), 0)
+  account_replication_type  = element(split("_", var.boot_diagnostics_sa_type), 1)
+  min_tls_version           = "TLS1_2"
+  enable_https_traffic_only = true
+
+  network_rules {
+    default_action = "Deny"
+  }
+
+  queue_properties {
+    logging {
+      delete                = true
+      read                  = true
+      write                 = true
+      version               = "1.0"
+      retention_policy_days = 10
+    }
+
+    hour_metrics {
+      enabled               = true
+      include_apis          = true
+      version               = "1.0"
+      retention_policy_days = 10
+    }
+    minute_metrics {
+      enabled               = true
+      include_apis          = true
+      version               = "1.0"
+      retention_policy_days = 10
+    }
+
+  }
+  tags = var.tags
 }
 
 resource "azurerm_virtual_machine" "vm-linux" {
@@ -140,6 +170,8 @@ resource "azurerm_virtual_machine" "vm-linux" {
 }
 
 resource "azurerm_virtual_machine" "vm-windows" {
+  #checkov:skip=CKV2_AZURE_12:https://docs.bridgecrew.io/docs/ensure-that-virtual-machines-are-backed-up-using-azure-backup
+  #checkov:skip=CKV2_AZURE_10:https://docs.bridgecrew.io/docs/ensure-that-microsoft-antimalware-is-configured-to-automatically-updates-for-virtual-machines
   count                         = (var.is_windows_image || contains(tolist([var.vm_os_simple, var.vm_os_offer]), "WindowsServer")) ? var.nb_instances : 0
   name                          = "${var.vm_hostname}-vmWindows-${count.index}"
   resource_group_name           = data.azurerm_resource_group.vm.name

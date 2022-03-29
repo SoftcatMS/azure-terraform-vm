@@ -1,0 +1,8 @@
+skip-check: 
+  - CKV_AZURE_43
+  - CKV2_AZURE_18
+  - CKV2_AZURE_1
+  - CKV2_AZURE_12
+  - CKV2_AZURE_10
+  - CKV_AZURE_119
+  - CKV_AZURE_1
