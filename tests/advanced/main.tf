@@ -47,7 +47,7 @@ module "linuxservers" {
   data_disk_size_gb                = 64
   data_sa_type                     = "Standard_LRS"
   enable_ssh_key                   = true
-  ssh_key                          = "dummy_rsa.pub"
+  ssh_key                          = file("dummy_rsa.pub")
   delete_data_disks_on_termination = true
 
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
@@ -62,7 +62,7 @@ module "windowsservers" {
   admin_password                = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
   allocation_method             = "Static"
   public_ip_sku                 = "Standard"
-  public_ip_dns                 = ["linuxtestbasicvmip1", "linuxtestbasicvmip2"]
+  public_ip_dns                 = ["linuxtestadvvmip1", "linuxtestadvvmip2"]
   nb_public_ip                  = 1
   remote_port                   = "3389"
   nb_instances                  = 1
