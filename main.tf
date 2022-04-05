@@ -59,7 +59,6 @@ resource "azurerm_storage_account" "vm-sa" {
   tags = var.tags
 }
 
-
 resource "azurerm_virtual_machine" "vm-linux" {
   count                            = !contains(tolist([var.vm_os_simple, var.vm_os_offer]), "WindowsServer") && !var.is_windows_image ? var.nb_instances : 0
   name                             = "${var.vm_hostname}-vmLinux-${count.index}"
@@ -131,7 +130,15 @@ resource "azurerm_virtual_machine" "vm-linux" {
   }
 
   os_profile_linux_config {
-    disable_password_authentication = true
+    disable_password_authentication = var.enable_ssh_key
+
+    dynamic "ssh_keys" {
+      for_each = var.enable_ssh_key ? local.ssh_keys : []
+      content {
+        path     = "/home/${var.admin_username}/.ssh/authorized_keys"
+        key_data = file(ssh_keys.value)
+      }
+    }
 
     dynamic "ssh_keys" {
       for_each = var.enable_ssh_key ? var.ssh_key_values : []
