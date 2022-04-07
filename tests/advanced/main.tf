@@ -1,25 +1,22 @@
+resource "tls_private_key" "test_key" {
+  algorithm = "RSA"
+  rsa_bits  = "4096"
+}
+
+
 resource "azurerm_resource_group" "rg-vm-test-advanced" {
   name     = "rg-test-vm-advanced-resources"
   location = "UK South"
 }
 
 module "vnet" {
+
   source              = "github.com/SoftcatMS/azure-terraform-vnet"
   vnet_name           = "vnet-test-advanced"
   resource_group_name = azurerm_resource_group.rg-vm-test-advanced.name
-  address_space       = ["10.2.0.0/16"]
-  subnet_prefixes     = ["10.2.1.0/24", "10.2.2.0/24", "10.2.3.0/24"]
-  subnet_names        = ["subnet1", "subnet2", "subnet3"]
-
-  subnet_enforce_private_link_endpoint_network_policies = {
-    "subnet1" : true
-  }
-
-  subnet_service_endpoints = {
-    "subnet1" : ["Microsoft.Sql"],
-    "subnet2" : ["Microsoft.Sql"],
-    "subnet3" : ["Microsoft.Sql"]
-  }
+  address_space       = ["10.1.0.0/16"]
+  subnet_prefixes     = ["10.1.1.0/24"]
+  subnet_names        = ["subnet1"]
 
   tags = {
     environment = "test"
@@ -29,52 +26,123 @@ module "vnet" {
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
 }
 
+
 module "linuxservers" {
-  source                           = "../../"
-  resource_group_name              = azurerm_resource_group.rg-vm-test-advanced.name
-  vm_hostname                      = "linux-test-vm"
-  vm_size                          = "Standard_B1ls"
-  nb_public_ip                     = 0
-  remote_port                      = "22"
-  nb_instances                     = 2
-  vm_os_publisher                  = "Canonical"
-  vm_os_offer                      = "UbuntuServer"
-  vm_os_sku                        = "18.04-LTS"
-  vnet_subnet_id                   = module.vnet.vnet_subnets[0]
-  boot_diagnostics                 = true
-  delete_os_disk_on_termination    = true
-  nb_data_disk                     = 2
-  data_disk_size_gb                = 64
-  data_sa_type                     = "Standard_LRS"
-  enable_ssh_key                   = true
-  ssh_key                          = file("dummy_rsa.pub")
-  delete_data_disks_on_termination = true
+  source                          = "../../modules/linux-vm"
+  name                            = "linux-test-vm-adv"
+  resource_group_name             = azurerm_resource_group.rg-vm-test-advanced.name
+  location                        = azurerm_resource_group.rg-vm-test-advanced.location
+  virtual_machine_size            = "Standard_B1ls"
+  disable_password_authentication = true
+  enable_public_ip                = true
+  public_ip_dns                   = "linuxtestadvancedvmip" // change to a unique name per datacenter region
+  vnet_subnet_id                  = module.vnet.vnet_subnets[0]
+  enable_accelerated_networking   = false
+  admin_ssh_key                   = tls_private_key.test_key.public_key_openssh
+
+  os_disk = [{
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }]
+
+  source_image_publisher = "Canonical"
+  source_image_offer     = "UbuntuServer"
+  source_image_sku       = "16.04-LTS"
+  source_image_version   = "latest"
+
+  data_disks = [
+    {
+      name                 = "disk1"
+      lun                  = 1
+      disk_size_gb         = 100
+      storage_account_type = "StandardSSD_LRS"
+      caching              = "ReadWrite"
+    },
+    {
+      name                 = "disk2"
+      lun                  = 2
+      disk_size_gb         = 200
+      storage_account_type = "Standard_LRS"
+      caching              = "ReadWrite"
+    }
+  ]
+
+
+  nsg_inbound_rules = [
+    {
+      name                       = "ssh-in"
+      destination_port_range     = "22"
+      destination_address_prefix = "10.1.1.0/24"
+      source_address_prefix      = "*"
+    },
+  ]
+
 
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
 }
 
-module "windowsservers" {
-  source                        = "../../"
+
+
+
+module "windowsserver" {
+  source                        = "../../modules/windows-vm"
+  name                          = "wintest-vm-adv"
   resource_group_name           = azurerm_resource_group.rg-vm-test-advanced.name
-  vm_hostname                   = "win-test-vm"
-  vm_size                       = "Standard_D2_v4"
-  is_windows_image              = true
+  location                      = azurerm_resource_group.rg-vm-test-advanced.location
+  virtual_machine_size          = "Standard_B1ls"
   admin_password                = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
-  allocation_method             = "Static"
-  public_ip_sku                 = "Standard"
-  public_ip_dns                 = ["linuxtestadvvmip1", "linuxtestadvvmip2"]
-  nb_public_ip                  = 1
-  remote_port                   = "3389"
-  nb_instances                  = 1
-  vm_os_publisher               = "MicrosoftWindowsServer"
-  vm_os_offer                   = "WindowsServer"
-  vm_os_sku                     = "2012-R2-Datacenter"
+  enable_public_ip              = true
+  public_ip_dns                 = "wintestadvancedvmip" // change to a unique name per datacenter region
   vnet_subnet_id                = module.vnet.vnet_subnets[0]
-  enable_accelerated_networking = true
-  data_sa_type                  = "Standard_LRS"
-  storage_account_type          = "Standard_LRS"
-  license_type                  = "Windows_Client"
-  identity_type                 = "SystemAssigned" // can be empty, SystemAssigned or UserAssigned
+  enable_accelerated_networking = false
+
+  source_image_publisher = "MicrosoftWindowsServer"
+  source_image_offer     = "WindowsServer"
+  source_image_sku       = "2019-Datacenter"
+  source_image_version   = "latest"
+
+
+  os_disk = [{
+    disk_size_gb         = 150
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }]
+
+
+  data_disks = [
+    {
+      name                 = "disk1"
+      lun                  = 1
+      disk_size_gb         = 100
+      storage_account_type = "StandardSSD_LRS"
+      caching              = "ReadWrite"
+    },
+    {
+      name                 = "disk2"
+      lun                  = 2
+      disk_size_gb         = 200
+      storage_account_type = "Standard_LRS"
+      caching              = "ReadWrite"
+    }
+  ]
+
+
+  nsg_inbound_rules = [
+    {
+      name                       = "rdp"
+      destination_port_range     = "3389"
+      source_address_prefix      = "*"
+      destination_address_prefix = "10.1.1.0/24"
+    },
+    {
+      name                       = "http"
+      destination_port_range     = "80"
+      source_address_prefix      = "*"
+      destination_address_prefix = "10.1.1.0/24"
+    },
+  ]
+
 
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
 }
+
