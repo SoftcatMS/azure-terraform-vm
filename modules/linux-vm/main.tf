@@ -156,6 +156,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   provision_vm_agent              = var.provision_vm_agent
   proximity_placement_group_id    = var.proximity_placement_group_id
   zone                            = var.vm_availability_zone
+  user_data                       = var.user_data
   tags                            = var.tags
 
 

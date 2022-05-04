@@ -11,8 +11,8 @@ describe azure_virtual_machine(resource_group: resource_group1, name: 'linux-tes
 end
 
 
-describe azure_virtual_machine(resource_group: resource_group1, name: 'windows-test-vm') do
+describe azure_virtual_machine(resource_group: resource_group1, name: 'wintest-vm') do
   it { should exist }
-  its('os_disk_name') { should match 'windows-test-vm-osdisk' }
+  its('os_disk_name') { should match 'wintest-vm-osdisk' }
 
 end

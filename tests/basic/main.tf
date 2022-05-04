@@ -33,6 +33,7 @@ module "linuxservers" {
   public_ip_dns                   = "linuxtestbasicvmip" // change to a unique name per datacenter region
   vnet_subnet_id                  = module.vnet.vnet_subnets[0]
   enable_accelerated_networking   = false
+  user_data                       = "aG9zdG5hbWU="
 
   os_disk = [{
     caching              = "ReadWrite"
@@ -52,6 +53,12 @@ module "linuxservers" {
       destination_address_prefix = "10.1.1.0/24"
       source_address_prefix      = "*"
     },
+    {
+      name                       = "https"
+      destination_port_range     = "443"
+      source_address_prefix      = "*"
+      destination_address_prefix = "10.1.1.0/24"
+    }
   ]
 
 
@@ -60,10 +67,9 @@ module "linuxservers" {
 
 
 
-
 module "windowsserver" {
   source                        = "../../modules/windows-vm"
-  name                          = "windows-test-vm"
+  name                          = "wintest-vm"
   resource_group_name           = azurerm_resource_group.rg-vm-test-basic.name
   location                      = azurerm_resource_group.rg-vm-test-basic.location
   virtual_machine_size          = "Standard_B1ls"
@@ -101,7 +107,5 @@ module "windowsserver" {
     },
   ]
 
-
   depends_on = [azurerm_resource_group.rg-vm-test-basic]
 }
-
