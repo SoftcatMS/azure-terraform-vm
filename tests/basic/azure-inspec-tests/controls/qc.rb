@@ -5,14 +5,14 @@
 resource_group1 = 'rg-test-vm-basic-resources'
 
 
-describe azure_virtual_machine(resource_group: resource_group1, name: 'linux-test-vm-vmLinux-0') do
+describe azure_virtual_machine(resource_group: resource_group1, name: 'linux-test-vm') do
   it { should exist }
-  its('os_disk_name') { should match 'linux-test-vm-osdisk-0' }
+  its('os_disk_name') { should match 'linux-test-vm-osdisk' }
 end
 
 
-describe azure_virtual_machine(resource_group: resource_group1, name: 'win-test-vm-vmWindows-0') do
+describe azure_virtual_machine(resource_group: resource_group1, name: 'windows-test-vm') do
   it { should exist }
-  its('os_disk_name') { should match 'win-test-vm-osdisk-0' }
+  its('os_disk_name') { should match 'windows-test-vm-osdisk' }
 
 end
