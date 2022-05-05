@@ -428,3 +428,8 @@ variable "enable_automatic_updates" {
   description = "Specifies if Automatic Updates are Enabled for the Windows Virtual Machine."
   default     = true
 }
+
+variable "user_data" {
+  description = "The Base64-Encoded User Data scripts which should be passed to this Virtual Machine at provisioning."
+  default     = null
+}

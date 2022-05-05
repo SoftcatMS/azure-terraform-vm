@@ -84,6 +84,8 @@ module "windowsserver" {
   public_ip_dns                 = "wintestadvancedvmip" // change to a unique name per datacenter region
   vnet_subnet_id                = module.vnet.vnet_subnets[0]
   enable_accelerated_networking = false
+  secret                        = [data.azurerm_key_vault.example.id]
+
 
   source_image_publisher = "MicrosoftWindowsServer"
   source_image_offer     = "WindowsServer"

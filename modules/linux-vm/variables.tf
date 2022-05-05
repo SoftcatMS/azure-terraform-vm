@@ -296,12 +296,6 @@ variable "enable_accelerated_networking" {
   default     = true
 }
 
-# variable "remote_port" {
-#   description = "Remote tcp port to be used for access to the vms created via the nsg applied to the nics."
-#   type        = number
-#   default     = 22
-# }
-
 variable "source_address_prefixes" {
   description = "(Optional) List of source address prefixes allowed to access var.remote_port."
   type        = list(string)
@@ -403,3 +397,10 @@ variable "vm_availability_zone" {
   description = "The Zone in which this Virtual Machine should be created. Conflicts with availability set and shouldn't use both"
   default     = null
 }
+
+variable "user_data" {
+  description = "The Base64-Encoded User Data scripts which should be passed to this Virtual Machine at provisioning."
+  default     = null
+}
+
+

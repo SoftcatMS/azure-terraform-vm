@@ -159,8 +159,8 @@ resource "azurerm_windows_virtual_machine" "vm" {
   proximity_placement_group_id = var.proximity_placement_group_id
   zone                         = var.vm_availability_zone
   timezone                     = var.vm_time_zone
+  user_data                    = var.user_data
   tags                         = var.tags
-
 
   network_interface_ids = [
     azurerm_network_interface.vm.id,
