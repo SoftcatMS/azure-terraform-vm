@@ -1,10 +1,9 @@
 
-## linux_virtual_machine common vars
+## Linux
 
 variable "name" {
   description = "name of the azure vm"
   type        = string
-  default     = "linux"
 }
 
 variable "resource_group_name" {
