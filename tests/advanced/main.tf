@@ -28,17 +28,17 @@ module "vnet" {
 
 
 module "linuxservers" {
-  source                          = "../../modules/linux-vm"
-  name                            = "linux-test-vm-adv"
-  resource_group_name             = azurerm_resource_group.rg-vm-test-advanced.name
-  location                        = azurerm_resource_group.rg-vm-test-advanced.location
-  virtual_machine_size            = "Standard_B1ls"
-  disable_password_authentication = true
-  enable_public_ip                = true
-  public_ip_dns                   = "linuxtestadvancedvmip" // change to a unique name per datacenter region
-  vnet_subnet_id                  = module.vnet.vnet_subnets[0]
-  enable_accelerated_networking   = false
-  admin_ssh_key                   = tls_private_key.test_key.public_key_openssh
+  source                        = "../../modules/linux-vm"
+  name                          = "linux-test-vm-adv"
+  resource_group_name           = azurerm_resource_group.rg-vm-test-advanced.name
+  location                      = azurerm_resource_group.rg-vm-test-advanced.location
+  virtual_machine_size          = "Standard_B1ls"
+  admin_password                = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
+  enable_public_ip              = true
+  public_ip_dns                 = "linuxtestadvancedvmip" // change to a unique name per datacenter region
+  vnet_subnet_id                = module.vnet.vnet_subnets[0]
+  enable_accelerated_networking = false
+  admin_ssh_key                 = tls_private_key.test_key.public_key_openssh
 
   os_disk = [{
     caching              = "ReadWrite"

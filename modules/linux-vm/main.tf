@@ -244,3 +244,35 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
   lun                = each.value.data_disk.lun
   caching            = each.value.data_disk.caching
 }
+
+data "template_file" "linux_provision_vm" {
+  template = file("../../templates/linux_provision_vm.sh.tmpl")
+  vars = {
+    password = var.admin_password
+  }
+}
+
+resource "local_file" "linux_provision_vm" {
+  content  = <<EOF
+    ${data.template_file.linux_provision_vm.rendered}
+  EOF
+  filename = "./linux_provision_vm.sh"
+}
+
+resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
+  name                 = "provision-linux-ext"
+  virtual_machine_id   = azurerm_linux_virtual_machine.vm.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  settings = <<SETTINGS
+    {
+        "script": "${base64encode(local_file.linux_provision_vm.content)}"
+    }
+    SETTINGS
+
+  depends_on = [
+    azurerm_linux_virtual_machine.vm
+  ]
+}

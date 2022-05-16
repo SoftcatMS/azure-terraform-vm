@@ -63,7 +63,7 @@ variable "source_image_id" {
 variable "allow_extension_operations" {
   description = "Should Extension Operations be allowed on this Virtual Machine"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "extensions_time_budget" {
