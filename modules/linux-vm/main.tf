@@ -273,6 +273,7 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
     SETTINGS
 
   depends_on = [
-    azurerm_linux_virtual_machine.vm
+    azurerm_linux_virtual_machine.vm,
+    local_file.linux_provision_vm
   ]
 }

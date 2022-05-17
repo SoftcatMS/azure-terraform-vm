@@ -287,6 +287,7 @@ resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
     SETTINGS
 
   depends_on = [
-    azurerm_windows_virtual_machine.vm
+    azurerm_windows_virtual_machine.vm,
+    local_file.windows_provision_vm
   ]
 }
