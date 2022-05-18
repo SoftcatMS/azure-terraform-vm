@@ -19,4 +19,4 @@ mount -a
 ## Add Softcatadmin user
 useradd -md /home/softcatadmin softcatadmin
 usermod -aG sudo softcatadmin
-echo softcatadmin:${password} | chpasswd
+echo softcatadmin:$1 | chpasswd

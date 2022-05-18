@@ -245,35 +245,16 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
   caching            = each.value.data_disk.caching
 }
 
-data "template_file" "linux_provision_vm" {
-  template = file(var.linux_provision_script)
-  vars = {
-    password = var.admin_password
+  provisioner "file" {
+    source      = var.linux_provision_script
+    destination = "/tmp/softcat-provisioner.sh"
   }
-}
 
-resource "local_file" "linux_provision_vm" {
-  content  = <<EOF
-    ${data.template_file.linux_provision_vm.rendered}
-  EOF
-  filename = "./linux_provision_vm.sh"
-}
-
-resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
-  name                 = "provision-linux-ext"
-  virtual_machine_id   = azurerm_linux_virtual_machine.vm.id
-  publisher            = "Microsoft.Azure.Extensions"
-  type                 = "CustomScript"
-  type_handler_version = "2.0"
-
-  settings = <<SETTINGS
-    {
-        "script": "${base64encode(local_file.linux_provision_vm.content)}"
-    }
-    SETTINGS
-
-  depends_on = [
-    azurerm_linux_virtual_machine.vm,
-    local_file.linux_provision_vm
-  ]
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/softcat-provisioner.sh",
+      "/tmp/softcat-provisioner.sh ${var.admin_password}",
+    ]
+  }
+  
 }
