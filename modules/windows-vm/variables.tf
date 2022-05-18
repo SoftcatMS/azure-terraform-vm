@@ -432,3 +432,10 @@ variable "user_data" {
   description = "The Base64-Encoded User Data scripts which should be passed to this Virtual Machine at provisioning."
   default     = null
 }
+
+
+variable "windows_provision_script" {
+  description = "Path to Windows provisioning script."
+  type        = string
+  default     = "./scripts/windows_provision_vm.ps1"
+}

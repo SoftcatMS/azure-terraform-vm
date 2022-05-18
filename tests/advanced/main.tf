@@ -39,6 +39,8 @@ module "linuxservers" {
   vnet_subnet_id                = module.vnet.vnet_subnets[0]
   enable_accelerated_networking = false
   admin_ssh_key                 = tls_private_key.test_key.public_key_openssh
+  linux_provision_script        = "./scripts/linux_provision_vm.sh"
+
 
   os_disk = [{
     caching              = "ReadWrite"
@@ -80,6 +82,7 @@ module "linuxservers" {
 
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
 }
+
 
 
 
@@ -145,4 +148,3 @@ module "windowsserver" {
 
   depends_on = [azurerm_resource_group.rg-vm-test-advanced]
 }
-

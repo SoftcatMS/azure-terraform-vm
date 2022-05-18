@@ -246,7 +246,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 }
 
 data "template_file" "linux_provision_vm" {
-  template = file("../../templates/linux_provision_vm.sh.tmpl")
+  template = file(var.linux_provision_script)
   vars = {
     password = var.admin_password
   }
@@ -273,6 +273,7 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
     SETTINGS
 
   depends_on = [
-    azurerm_linux_virtual_machine.vm
+    azurerm_linux_virtual_machine.vm,
+    local_file.linux_provision_vm
   ]
 }
