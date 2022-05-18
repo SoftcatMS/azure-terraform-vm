@@ -259,7 +259,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 }
 
 data "template_file" "windows_provision_vm" {
-  template = file("../../templates/windows_provision_vm.ps1.tmpl")
+  template = file(var.windows_provision_script)
   vars = {
     password = var.admin_password
   }

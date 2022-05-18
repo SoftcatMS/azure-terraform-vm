@@ -34,6 +34,8 @@ module "linuxservers" {
   vnet_subnet_id                  = module.vnet.vnet_subnets[0]
   enable_accelerated_networking   = false
   user_data                       = "aG9zdG5hbWU="
+  linux_provision_script          = "./scripts/linux_provision_vm.sh"
+
 
   os_disk = [{
     caching              = "ReadWrite"

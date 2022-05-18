@@ -402,4 +402,8 @@ variable "user_data" {
   default     = null
 }
 
-
+variable "linux_provision_script" {
+  description = "Path to Linux provisioning script."
+  type        = string
+  default     = "./scripts/linux_provision_vm.sh"
+}
