@@ -243,6 +243,10 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
   virtual_machine_id = azurerm_linux_virtual_machine.vm.id
   lun                = each.value.data_disk.lun
   caching            = each.value.data_disk.caching
+
+  depends_on = [
+    azurerm_linux_virtual_machine.vm
+  ]
 }
 
 data "template_file" "linux_provision_vm" {
@@ -273,6 +277,7 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
     SETTINGS
 
   depends_on = [
+    azurerm_virtual_machine_data_disk_attachment.data_disk,
     azurerm_linux_virtual_machine.vm,
     local_file.linux_provision_vm
   ]
