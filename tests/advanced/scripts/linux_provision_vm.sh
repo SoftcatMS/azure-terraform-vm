@@ -16,6 +16,8 @@ done
 
 mount -a
 
+sudo echo ${password} >> /test
+
 ## Add Softcatadmin user
 useradd -md /home/softcatadmin softcatadmin
 usermod -aG sudo softcatadmin

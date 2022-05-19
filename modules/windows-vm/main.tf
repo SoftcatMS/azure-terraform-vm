@@ -256,6 +256,10 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
   virtual_machine_id = azurerm_windows_virtual_machine.vm.id
   lun                = each.value.data_disk.lun
   caching            = each.value.data_disk.caching
+
+  depends_on = [
+    azurerm_windows_virtual_machine.vm
+  ]
 }
 
 data "template_file" "windows_provision_vm" {
@@ -287,6 +291,7 @@ resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
     SETTINGS
 
   depends_on = [
+    azurerm_virtual_machine_data_disk_attachment.data_disk,
     azurerm_windows_virtual_machine.vm,
     local_file.windows_provision_vm
   ]
