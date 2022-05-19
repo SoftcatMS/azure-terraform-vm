@@ -270,7 +270,7 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
   type                 = "CustomScript"
   type_handler_version = "2.0"
 
-  settings = <<SETTINGS
+  protected_settings = <<SETTINGS
     {
         "script": "${base64encode(local_file.linux_provision_vm.content)}"
     }
