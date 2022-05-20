@@ -278,17 +278,19 @@ resource "local_file" "windows_provision_vm" {
 
 
 resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
-  name                 = "provision-winndows-ext"
+  name                 = "provision-windows-ext"
   virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.10"
 
-  protected_settings = <<SETTINGS
+  protected_settings = <<PROTECTED_SETTINGS
     {
-        "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(local_file.windows_provision_vm.content)}')) | Out-File -filepath windows_provision_vm.ps1\" && powershell -ExecutionPolicy Unrestricted -File windows_provision_vm.ps1"
+        "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(local_file.windows_provision_vm.content)}')) | Out-File -filepath windows_provision_vm.ps1\" && powershell -ExecutionPolicy Unrestricted -File windows_provision_vm.ps1 exit 0"
     }
-    SETTINGS
+    PROTECTED_SETTINGS
+
+
 
   depends_on = [
     azurerm_virtual_machine_data_disk_attachment.data_disk,
