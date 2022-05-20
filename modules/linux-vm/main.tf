@@ -268,13 +268,19 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
   virtual_machine_id   = azurerm_linux_virtual_machine.vm.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
-  type_handler_version = "2.0"
+  type_handler_version = "2.1"
 
-  protected_settings = <<SETTINGS
+  settings = <<SETTINGS
+     {
+         "skipDos2Unix":true
+     }
+ SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
     {
         "script": "${base64encode(local_file.linux_provision_vm.content)}"
     }
-    SETTINGS
+ PROTECTED_SETTINGS
 
   depends_on = [
     azurerm_virtual_machine_data_disk_attachment.data_disk,

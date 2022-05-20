@@ -16,9 +16,12 @@ done
 
 mount -a
 
-sudo echo ${password} >> /test
-
 ## Add Softcatadmin user
-useradd -md /home/softcatadmin softcatadmin
-usermod -aG sudo softcatadmin
-echo softcatadmin:${password} | chpasswd
+
+if id -u "softcatadmin" >/dev/null 2>&1; then
+    echo "softcatadmin exists"
+else
+    useradd -md /home/softcatadmin softcatadmin
+    usermod -aG sudo softcatadmin
+    echo softcatadmin:${password} | chpasswd
+fi
