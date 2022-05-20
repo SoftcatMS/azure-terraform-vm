@@ -15,6 +15,17 @@ $count++
 }
 
 ## Add Softcatadmin user
-New-LocalUser -AccountNeverExpires:$true -Password ( ConvertTo-SecureString -AsPlainText -Force ${password}) -Name 'softcatadmin' -Description "Softcat Administrator" 
-Add-LocalGroupMember -Group "Administrators" -Member 'softcatadmin'
-Add-LocalGroupMember -Group "Remote Desktop Users" -Member 'softcatadmin'
+$userName = "softcatadmin"
+$checkForUser = (Get-LocalUser).Name -Contains $userName
+
+if ($checkForUser -eq "False") { 
+    New-LocalUser -AccountNeverExpires:$true -Password ( ConvertTo-SecureString -AsPlainText -Force ${password}) -Name $userName -Description "Softcat Administrator" 
+    Add-LocalGroupMember -Group "Administrators" -Member $userName
+    Add-LocalGroupMember -Group "Remote Desktop Users" -Member $userName
+} 
+ElseIf ($checkForUser -eq "True") 
+{ 
+    Write-Host "$userName Exists"
+}
+
+

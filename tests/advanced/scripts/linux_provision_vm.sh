@@ -18,7 +18,8 @@ mount -a
 
 ## Add Softcatadmin user
 
-if id -u "softcatadmin" >/dev/null 2>&1; then
+if id -u "softcatadmin" >/dev/null 2>&1
+then
     echo "softcatadmin exists"
 else
     useradd -md /home/softcatadmin softcatadmin

@@ -256,7 +256,7 @@ data "template_file" "linux_provision_vm" {
   }
 }
 
-resource "local_file" "linux_provision_vm" {
+resource "local_sensitive_file" "linux_provision_vm" {
   content  = <<EOF
     ${data.template_file.linux_provision_vm.rendered}
   EOF
@@ -278,13 +278,13 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
 
   protected_settings = <<PROTECTED_SETTINGS
     {
-        "script": "${base64encode(local_file.linux_provision_vm.content)}"
+        "script": "${base64encode(local_sensitive_file.linux_provision_vm.content)}"
     }
  PROTECTED_SETTINGS
 
   depends_on = [
     azurerm_virtual_machine_data_disk_attachment.data_disk,
     azurerm_linux_virtual_machine.vm,
-    local_file.linux_provision_vm
+    local_sensitive_file.linux_provision_vm
   ]
 }

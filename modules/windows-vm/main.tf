@@ -269,7 +269,7 @@ data "template_file" "windows_provision_vm" {
   }
 }
 
-resource "local_file" "windows_provision_vm" {
+resource "local_sensitive_file" "windows_provision_vm" {
   content  = <<EOF
     ${data.template_file.windows_provision_vm.rendered}
   EOF
@@ -286,7 +286,7 @@ resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
 
   protected_settings = <<PROTECTED_SETTINGS
     {
-        "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(local_file.windows_provision_vm.content)}')) | Out-File -filepath windows_provision_vm.ps1\" && powershell -ExecutionPolicy Unrestricted -File windows_provision_vm.ps1 exit 0"
+        "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(local_sensitive_file.windows_provision_vm.content)}')) | Out-File -filepath windows_provision_vm.ps1\" && powershell -ExecutionPolicy Unrestricted -File windows_provision_vm.ps1 exit 0"
     }
     PROTECTED_SETTINGS
 
@@ -295,6 +295,6 @@ resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
   depends_on = [
     azurerm_virtual_machine_data_disk_attachment.data_disk,
     azurerm_windows_virtual_machine.vm,
-    local_file.windows_provision_vm
+    local_sensitive_file.windows_provision_vm
   ]
 }
