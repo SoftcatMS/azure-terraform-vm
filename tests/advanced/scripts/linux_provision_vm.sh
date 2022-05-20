@@ -4,7 +4,7 @@
 for LUN in $(ls /dev/disk/azure/scsi1)
 do 
     NUM=$(echo $LUN | grep -o -E "[0-9]+")
-    if [ -d "/data$NUM" ]
+    if [ -d "/mnt/data$NUM" ]
     then
         echo "Disk Exists"
     else

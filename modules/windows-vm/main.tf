@@ -284,7 +284,7 @@ resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
   type                 = "CustomScriptExtension"
   type_handler_version = "1.10"
 
-  settings = <<SETTINGS
+  protected_settings = <<SETTINGS
     {
         "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(local_file.windows_provision_vm.content)}')) | Out-File -filepath windows_provision_vm.ps1\" && powershell -ExecutionPolicy Unrestricted -File windows_provision_vm.ps1"
     }
