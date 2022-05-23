@@ -272,7 +272,7 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
 
   settings = <<SETTINGS
      {
-         "skipDos2Unix":true
+         "skipDos2Unix":false
      }
  SETTINGS
 
