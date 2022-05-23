@@ -158,56 +158,56 @@ stages:
 
 
 
-  # - stage: TerraformDestroy
-  #   displayName: Terraform Destroy
+  - stage: TerraformDestroy
+    displayName: Terraform Destroy
 
-  #   jobs:
-  #   - job: TerraformDestroy
-  #     displayName: Terraform Destroy
-  #     pool:
-  #       vmImage: ubuntu-20.04
+    jobs:
+    - job: TerraformDestroy
+      displayName: Terraform Destroy
+      pool:
+        vmImage: ubuntu-20.04
 
-  #     steps:
-  #     - task: TerraformInstaller@0
-  #       inputs:
-  #         terraformVersion: 'latest'
+      steps:
+      - task: TerraformInstaller@0
+        inputs:
+          terraformVersion: 'latest'
 
-  #     - task: TerraformTaskV2@2
-  #       displayName: Init Basic
-  #       inputs:
-  #         provider: 'azurerm'
-  #         command: 'init'
-  #         workingDirectory: 'tests/basic/'
-  #         backendServiceArm: 'sandbox-terraform-testing-spn'
-  #         backendAzureRmResourceGroupName: 'rg-terraform-modules-state'
-  #         backendAzureRmStorageAccountName: 'softcatmodulestate'
-  #         backendAzureRmContainerName: 'tf-modules-azure-vm-basic'
-  #         backendAzureRmKey: 'terraform.tfstate'
+      - task: TerraformTaskV2@2
+        displayName: Init Basic
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: 'tests/basic/'
+          backendServiceArm: 'sandbox-terraform-testing-spn'
+          backendAzureRmResourceGroupName: 'rg-terraform-modules-state'
+          backendAzureRmStorageAccountName: 'softcatmodulestate'
+          backendAzureRmContainerName: 'tf-modules-azure-vm-basic'
+          backendAzureRmKey: 'terraform.tfstate'
 
-  #     - task: TerraformTaskV2@2
-  #       displayName: Destroy Basic
-  #       inputs:
-  #         provider: 'azurerm'
-  #         command: 'destroy'
-  #         workingDirectory: 'tests/basic/'
-  #         environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
+      - task: TerraformTaskV2@2
+        displayName: Destroy Basic
+        inputs:
+          provider: 'azurerm'
+          command: 'destroy'
+          workingDirectory: 'tests/basic/'
+          environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
 
-  #     - task: TerraformTaskV2@2
-  #       displayName: Init Advanced
-  #       inputs:
-  #         provider: 'azurerm'
-  #         command: 'init'
-  #         workingDirectory: 'tests/advanced/'
-  #         backendServiceArm: 'sandbox-terraform-testing-spn'
-  #         backendAzureRmResourceGroupName: 'rg-terraform-modules-state'
-  #         backendAzureRmStorageAccountName: 'softcatmodulestate'
-  #         backendAzureRmContainerName: 'tf-modules-azure-vm-advanced'
-  #         backendAzureRmKey: 'terraform.tfstate'
+      - task: TerraformTaskV2@2
+        displayName: Init Advanced
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: 'tests/advanced/'
+          backendServiceArm: 'sandbox-terraform-testing-spn'
+          backendAzureRmResourceGroupName: 'rg-terraform-modules-state'
+          backendAzureRmStorageAccountName: 'softcatmodulestate'
+          backendAzureRmContainerName: 'tf-modules-azure-vm-advanced'
+          backendAzureRmKey: 'terraform.tfstate'
 
-  #     - task: TerraformTaskV2@2
-  #       displayName: Destroy Advanced
-  #       inputs:
-  #         provider: 'azurerm'
-  #         command: 'destroy'
-  #         workingDirectory: 'tests/advanced/'
-  #         environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
+      - task: TerraformTaskV2@2
+        displayName: Destroy Advanced
+        inputs:
+          provider: 'azurerm'
+          command: 'destroy'
+          workingDirectory: 'tests/advanced/'
+          environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
