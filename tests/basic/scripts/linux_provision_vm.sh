@@ -4,7 +4,7 @@
 for LUN in $(ls /dev/disk/azure/scsi1)
 do 
     NUM=$(echo $LUN | grep -o -E "[0-9]+")
-    if [ -d "/data$NUM" ]
+    if [ -d "/mnt/data$NUM" ]
     then
         echo "Disk Exists"
     else
@@ -17,6 +17,11 @@ done
 mount -a
 
 ## Add Softcatadmin user
-useradd -md /home/softcatadmin softcatadmin
-usermod -aG sudo softcatadmin
-echo softcatadmin:${password} | chpasswd
+
+if id -u "softcatadmin" >/dev/null 2>&1; then
+    echo "softcatadmin exists"
+else
+    useradd -md /home/softcatadmin softcatadmin
+    usermod -aG sudo softcatadmin
+    echo softcatadmin:${password} | chpasswd
+fi
