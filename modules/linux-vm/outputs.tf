@@ -50,12 +50,7 @@ output "os_disk_type" {
 
 output "data_disk_ids" {
   description = "ids of the vm data disks provisioned"
-  value       = azurerm_managed_disk.data_disk.*.id
-}
-
-output "data_disk_types" {
-  description = "disk types of the vm data disks provisioned"
-  value       = azurerm_managed_disk.data_disk.*.storage_account_type
+  value       = [ for dd in azurerm_managed_disk.data_disk : dd.id ]
 }
 
 output "network_interface_id" {
