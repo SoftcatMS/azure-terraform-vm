@@ -40,7 +40,7 @@ output "public_ip_dns_name" {
 
 output "os_disk_id" {
   description = "id of the vm os disk provisioned"
-  value       = azurerm_linux_virtual_machine.vm.os_disk[0].id
+  value       = azurerm_linux_virtual_machine.vm.os_disk[0]
 }
 
 output "os_disk_type" {
