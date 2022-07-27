@@ -38,3 +38,27 @@ output "public_ip_dns_name" {
   value       = azurerm_public_ip.vm.*.fqdn
 }
 
+output "os_disk_id" {
+  description = "id of the VM OS disk"
+  value       = azurerm_windows_virtual_machine.vm.os_disk.id
+}
+
+output "os_disk_type" {
+  description = "VM OS disk type"
+  value       = azurerm_windows_virtual_machine.vm.os_disk.storage_account_type
+}
+
+output "data_disk_ids" {
+  description = "id of the VM data disks"
+  value       = azurerm_managed_disk.data_disk.*.id
+}
+
+output "data_disk_types" {
+  description = "VM data disk types"
+  value       = azurerm_managed_disk.data_disk.*.storage_account_type
+}
+
+output "network_interface_id" {
+  description = "VM network interface id"
+  value       = azurerm_network_interface.vm.id 
+}
