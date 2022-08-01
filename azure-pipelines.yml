@@ -117,7 +117,7 @@ stages:
           workingDirectory: 'tests/advanced/'
           environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
 
-      - task: TerraformTaskV2@2
+      - task: TerraformCLI@0
         displayName: Output Advanced
         inputs:
           command: 'output'
