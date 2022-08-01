@@ -76,7 +76,7 @@ stages:
           workingDirectory: 'tests/basic/'
           environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
       
-      - task: TerraformTaskV2@2
+      - task: TerraformCLI@0
         displayName: Output Basic
         inputs:
           command: 'output'
