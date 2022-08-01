@@ -263,6 +263,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 }
 
 data "template_file" "windows_provision_vm" {
+  count    = var.enable_provision_script ? 1 : 0
   template = file(var.windows_provision_script)
   vars = {
     password = var.admin_password
@@ -270,14 +271,16 @@ data "template_file" "windows_provision_vm" {
 }
 
 resource "local_sensitive_file" "windows_provision_vm" {
+  count    = var.enable_provision_script ? 1 : 0
   content  = <<EOF
-    ${data.template_file.windows_provision_vm.rendered}
+    ${data.template_file.windows_provision_vm[0].rendered}
   EOF
   filename = "./windows_provision_vm.ps1"
 }
 
 
 resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
+  count                = var.enable_provision_script ? 1 : 0
   name                 = "provision-windows-ext"
   virtual_machine_id   = azurerm_windows_virtual_machine.vm.id
   publisher            = "Microsoft.Compute"
@@ -286,7 +289,7 @@ resource "azurerm_virtual_machine_extension" "provision_windows_vm" {
 
   protected_settings = <<PROTECTED_SETTINGS
     {
-        "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(local_sensitive_file.windows_provision_vm.content)}')) | Out-File -filepath windows_provision_vm.ps1\" && powershell -ExecutionPolicy Unrestricted -File windows_provision_vm.ps1 exit 0"
+        "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(local_sensitive_file.windows_provision_vm[0].content)}')) | Out-File -filepath windows_provision_vm.ps1\" && powershell -ExecutionPolicy Unrestricted -File windows_provision_vm.ps1 exit 0"
     }
     PROTECTED_SETTINGS
 
