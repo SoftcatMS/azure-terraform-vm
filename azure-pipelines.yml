@@ -81,7 +81,6 @@ stages:
         inputs:
           command: 'output'
           workingDirectory: 'tests/basic/'
-          environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
 
       - task: TerraformTaskV2@2
         displayName: Init Advanced
@@ -123,7 +122,6 @@ stages:
         inputs:
           command: 'output'
           workingDirectory: 'tests/advanced/'
-          environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
 
   - stage: QC
     displayName: QC
