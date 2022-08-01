@@ -402,6 +402,12 @@ variable "user_data" {
   default     = null
 }
 
+variable "enable_provision_script" {
+  description = "Use provisoning script."
+  type        = bool
+  default     = true
+}
+
 variable "linux_provision_script" {
   description = "Path to Linux provisioning script."
   type        = string
