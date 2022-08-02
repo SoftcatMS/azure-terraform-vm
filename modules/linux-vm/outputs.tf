@@ -38,9 +38,9 @@ output "public_ip_dns_name" {
   value       = azurerm_public_ip.vm.*.fqdn
 }
 
-output "os_disk_id" {
+output "os_disk_name" {
   description = "id of the vm os disk provisioned"
-  value       = azurerm_linux_virtual_machine.vm.os_disk[0].id
+  value       = azurerm_linux_virtual_machine.vm.os_disk[0].name
 }
 
 output "os_disk_type" {
