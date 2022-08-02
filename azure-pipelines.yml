@@ -39,7 +39,7 @@ stages:
 
       - task: TerraformInstaller@0
         inputs:
-          terraformVersion: 'latest'
+          terraformVersion: '1.1.7'
 
       - task: TerraformTaskV2@2
         displayName: Init Basic
@@ -68,7 +68,7 @@ stages:
           workingDirectory: 'tests/basic/'
           environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
 
-      - task: TerraformTaskV3@3
+      - task: TerraformTaskV2@2
         displayName: Apply Basic
         inputs:
           provider: 'azurerm'
@@ -76,7 +76,7 @@ stages:
           workingDirectory: 'tests/basic/'
           environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
       
-      - task: TerraformTaskV3@3
+      - task: TerraformTaskV2@2
         displayName: Output Basic
         inputs:
           command: 'output'
@@ -110,7 +110,7 @@ stages:
           workingDirectory: 'tests/advanced/'
           environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
 
-      - task: TerraformTaskV3@3
+      - task: TerraformTaskV2@2
         displayName: Apply Advanced
         inputs:
           provider: 'azurerm'
@@ -118,7 +118,7 @@ stages:
           workingDirectory: 'tests/advanced/'
           environmentServiceNameAzureRM: 'sandbox-terraform-testing-spn'
 
-      - task: TerraformTaskV3@3
+      - task: TerraformTaskV2@2
         displayName: Output Advanced
         inputs:
           command: 'output'
