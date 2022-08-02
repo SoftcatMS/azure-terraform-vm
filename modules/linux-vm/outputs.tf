@@ -38,3 +38,22 @@ output "public_ip_dns_name" {
   value       = azurerm_public_ip.vm.*.fqdn
 }
 
+output "os_disk_name" {
+  description = "id of the vm os disk provisioned"
+  value       = azurerm_linux_virtual_machine.vm.os_disk[0].name
+}
+
+output "os_disk_type" {
+  description = "disk type of the vm os disk provisioned"
+  value       = azurerm_linux_virtual_machine.vm.os_disk[0].storage_account_type
+}
+
+output "data_disk_ids" {
+  description = "ids of the vm data disks provisioned"
+  value       = [ for dd in azurerm_managed_disk.data_disk : dd.id ]
+}
+
+output "network_interface_id" {
+  description = "id of the vm nic provisioned"
+  value       = azurerm_network_interface.vm.id 
+}
