@@ -57,3 +57,8 @@ output "network_interface_id" {
   description = "id of the vm nic provisioned"
   value       = azurerm_network_interface.vm.id 
 }
+
+output "data_disk_types" {
+  description = "ids of the vm data disks provisioned"
+  value       = [ for dd in azurerm_managed_disk.data_disk : dd.storage_account_type ]
+}

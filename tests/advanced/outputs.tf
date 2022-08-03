@@ -58,6 +58,11 @@ output "windows_network_interface_id" {
   value       = module.windowsserver.network_interface_id
 }
 
+output "windows_data_disk_types" {
+  description = "disk types of the vm data disks provisioned"
+  value       = module.windowsserver.data_disk_types
+}
+
 output "linux_virtual_machine_id" {
   description = "Virtual machine ids created."
   value       = module.linuxservers.virtual_machine_id
@@ -116,4 +121,9 @@ output "linux_data_disk_ids" {
 output "linux_network_interface_id" {
   description = "id of the vm nic provisioned"
   value       = module.linuxservers.network_interface_id
+}
+
+output "linux_data_disk_types" {
+  description = "disk types of the vm data disks provisioned"
+  value       = module.linuxservers.data_disk_types
 }
