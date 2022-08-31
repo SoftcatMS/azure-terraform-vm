@@ -20,7 +20,7 @@ module "vnet" {
   depends_on = [azurerm_resource_group.rg-vm-test-basic]
 }
 
-
+# No provisioning script
 module "linuxservers" {
   source                          = "../../modules/linux-vm"
   name                            = "linux-test-vm"
@@ -33,9 +33,8 @@ module "linuxservers" {
   public_ip_dns                   = "linuxtestbasicvmip" // change to a unique name per datacenter region
   vnet_subnet_id                  = module.vnet.vnet_subnets[0]
   enable_accelerated_networking   = false
+  enable_provision_script         = false
   user_data                       = "aG9zdG5hbWU="
-  linux_provision_script          = "./scripts/linux_provision_vm.sh"
-
 
   os_disk = [{
     caching              = "ReadWrite"
@@ -68,7 +67,7 @@ module "linuxservers" {
 }
 
 
-
+# No provisioning script
 module "windowsserver" {
   source                        = "../../modules/windows-vm"
   name                          = "wintest-vm"
@@ -80,6 +79,7 @@ module "windowsserver" {
   public_ip_dns                 = "wintestbasicvmip" // change to a unique name per datacenter region
   vnet_subnet_id                = module.vnet.vnet_subnets[0]
   enable_accelerated_networking = false
+  enable_provision_script       = false
 
   source_image_publisher = "MicrosoftWindowsServer"
   source_image_offer     = "WindowsServer"

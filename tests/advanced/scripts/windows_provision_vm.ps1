@@ -27,5 +27,3 @@ ElseIf ($checkForUser -eq "True")
 { 
     Write-Host "$userName Exists"
 }
-
-

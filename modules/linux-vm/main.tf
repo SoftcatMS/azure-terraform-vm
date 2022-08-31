@@ -250,6 +250,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 }
 
 data "template_file" "linux_provision_vm" {
+  count    = var.enable_provision_script ? 1 : 0
   template = file(var.linux_provision_script)
   vars = {
     password = var.admin_password
@@ -257,13 +258,15 @@ data "template_file" "linux_provision_vm" {
 }
 
 resource "local_sensitive_file" "linux_provision_vm" {
+  count    = var.enable_provision_script ? 1 : 0
   content  = <<EOF
-    ${data.template_file.linux_provision_vm.rendered}
+    ${data.template_file.linux_provision_vm[0].rendered}
   EOF
   filename = "./linux_provision_vm.sh"
 }
 
 resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
+  count                = var.enable_provision_script ? 1 : 0
   name                 = "provision-linux-ext"
   virtual_machine_id   = azurerm_linux_virtual_machine.vm.id
   publisher            = "Microsoft.Azure.Extensions"
@@ -272,13 +275,13 @@ resource "azurerm_virtual_machine_extension" "provision_linux_vm" {
 
   settings = <<SETTINGS
      {
-         "skipDos2Unix":true
+         "skipDos2Unix":false
      }
  SETTINGS
 
   protected_settings = <<PROTECTED_SETTINGS
     {
-        "script": "${base64encode(local_sensitive_file.linux_provision_vm.content)}"
+        "script": "${base64encode(local_sensitive_file.linux_provision_vm[0].content)}"
     }
  PROTECTED_SETTINGS
 
