@@ -31,7 +31,7 @@ module "linuxservers" {
   disable_password_authentication = false
   enable_public_ip                = true
   public_ip_dns                   = "linuxtestbasicvmip" // change to a unique name per datacenter region
-  vnet_subnet_id                  = module.vnet.vnet_subnets[0]
+  vnet_subnet_id                  = lookup(module.vnet.vnet_subnets_name_id, "subnet1")
   enable_accelerated_networking   = false
   enable_provision_script         = false
   user_data                       = "aG9zdG5hbWU="
@@ -77,7 +77,7 @@ module "windowsserver" {
   admin_password                = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
   enable_public_ip              = true
   public_ip_dns                 = "wintestbasicvmip" // change to a unique name per datacenter region
-  vnet_subnet_id                = module.vnet.vnet_subnets[0]
+  vnet_subnet_id                = lookup(module.vnet.vnet_subnets_name_id, "subnet1")
   enable_accelerated_networking = false
   enable_provision_script       = false
 

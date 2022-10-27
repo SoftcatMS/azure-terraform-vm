@@ -36,7 +36,7 @@ module "linuxservers" {
   admin_password                = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
   enable_public_ip              = true
   public_ip_dns                 = "linuxtestadvancedvmip" // change to a unique name per datacenter region
-  vnet_subnet_id                = module.vnet.vnet_subnets[0]
+  vnet_subnet_id                = lookup(module.vnet.vnet_subnets_name_id, "subnet1")
   enable_accelerated_networking = false
   admin_ssh_key                 = tls_private_key.test_key.public_key_openssh
   linux_provision_script        = "./scripts/linux_provision_vm.sh"
@@ -88,15 +88,16 @@ module "linuxservers" {
 
 
 module "windowsserver" {
-  source                        = "../../modules/windows-vm"
-  name                          = "wintest-vm-adv"
-  resource_group_name           = azurerm_resource_group.rg-vm-test-advanced.name
-  location                      = azurerm_resource_group.rg-vm-test-advanced.location
-  virtual_machine_size          = "Standard_B1ls"
-  admin_password                = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
-  enable_public_ip              = true
-  public_ip_dns                 = "wintestadvancedvmip" // change to a unique name per datacenter region
-  vnet_subnet_id                = module.vnet.vnet_subnets[0]
+  source               = "../../modules/windows-vm"
+  name                 = "wintest-vm-adv"
+  resource_group_name  = azurerm_resource_group.rg-vm-test-advanced.name
+  location             = azurerm_resource_group.rg-vm-test-advanced.location
+  virtual_machine_size = "Standard_B1ls"
+  admin_password       = "ComplxP@ssw0rd!" // Password should not be provided in plain text. Use secrets
+  enable_public_ip     = true
+  public_ip_dns        = "wintestadvancedvmip" // change to a unique name per datacenter region
+  vnet_subnet_id       = lookup(module.vnet.vnet_subnets_name_id, "subnet1")
+
   enable_accelerated_networking = false
 
   source_image_publisher = "MicrosoftWindowsServer"
