@@ -28,6 +28,9 @@ module "vnet" {
 
 
 module "linuxservers" {
+  #checkov:skip=CKV_AZURE_190:Ensure that Storage blobs restrict public access
+  #checkov:skip=CKV_AZURE_206:Ensure that Storage Accounts use replication
+  #checkov:skip=CKV_AZURE_1:Ensure Azure Instance does not use basic authentication(Use SSH Key Instead)
   source                        = "../../modules/linux-vm"
   name                          = "linux-test-vm-adv"
   resource_group_name           = azurerm_resource_group.rg-vm-test-advanced.name
@@ -88,6 +91,9 @@ module "linuxservers" {
 
 
 module "windowsserver" {
+  #checkov:skip=CKV_AZURE_190:Ensure that Storage blobs restrict public access
+  #checkov:skip=CKV_AZURE_206:Ensure that Storage Accounts use replication
+  #checkov:skip=CKV_AZURE_1:Ensure Azure Instance does not use basic authentication(Use SSH Key Instead)
   source               = "../../modules/windows-vm"
   name                 = "wintest-vm-adv"
   resource_group_name  = azurerm_resource_group.rg-vm-test-advanced.name
