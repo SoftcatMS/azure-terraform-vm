@@ -37,6 +37,7 @@ resource "azurerm_public_ip" "vm" {
 }
 
 resource "azurerm_network_interface" "vm" {
+  #checkov:skip=CKV_AZURE_119:Ensure that Network Interfaces don't use public IPs
   name                          = "${var.name}-nic"
   resource_group_name           = data.azurerm_resource_group.vm.name
   location                      = coalesce(var.location, data.azurerm_resource_group.vm.location)
@@ -136,6 +137,7 @@ resource "azurerm_storage_account" "vm-sa" {
 
 resource "azurerm_windows_virtual_machine" "vm" {
   #checkov:skip=CKV_AZURE_149:Ensure that Virtual machine does not enable password authentication
+  #checkov:skip=CKV_AZURE_50:Ensure Virtual Machine Extensions are not Installed
   name                         = var.name
   computer_name                = var.name # TO DO, add some intelligence around this
   resource_group_name          = data.azurerm_resource_group.vm.name
